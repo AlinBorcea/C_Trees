@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "tree.h"
 
@@ -21,6 +22,26 @@ Node *new_node(int key) {
     }
 
     return node;
+}
+
+Node *successor(Node *root) {
+    Node *it;
+
+    assert(root);
+
+    it = root->right;
+    if (!it) return NULL;
+
+    while (it->left) {
+        it = it->left;
+    }
+
+    return it;
+}
+
+void node_copy(Node *dst, Node *src) {
+    assert(dst && src);
+    dst->key = src->key;
 }
 
 int children_count(Node *node) {
@@ -132,12 +153,17 @@ Err tree_delete_id(Node **root, Node *parent, int id) {
             }
 
         } else if (kids == 2) {
-
+            tmp1 = successor(*root);
+            printf("Successor of target %d is %d\n", (*root)->key, tmp1->key);
+            node_copy(*root, tmp1);
+            return tree_delete_id(&(*root)->right, *root, tmp1->key);
         }
 
-        tmp->left = NULL;
-        tmp->right = NULL;
-        if (tmp != NULL) free(tmp);
+        if (tmp != NULL) {
+            tmp->left = NULL;
+            tmp->right = NULL;
+            free(tmp);
+        }
     }
 
     return e;

@@ -25,24 +25,11 @@ int main(int argc, char **argv) {
 
     printf("*******Usage test*******\n\n");
 
-    printf("tree_from_array: ");
-    if ((e = tree_from_array(&tree.root, num_array, argc - 1)).code) {
-        printf("fail\n");
-        fprintf(stderr, "%s", e.message);
-        return e.code;
-    } printf("ok\n");
-
-    printf("tree_delete_id 3: ");
-    if ((e = tree_delete_id(&tree.root, tree.root, 3)).code) {
-        printf("fail\n");
-        fprintf(stderr, "%s", e.message);
-        return e.code;
-    } printf("ok\n");
-
-    printf("tree_delete_id 3 non-existant ");
-    if ((e = tree_delete_id(&tree.root, tree.root, 3)).code) {
-        printf("passed\n");
-    }
+    tree_from_array(&tree.root, num_array, argc - 1);
+    tree_delete_id(&tree.root, tree.root, 50);
+    tree_delete_id(&tree.root, tree.root, 70);
+    tree_delete_id(&tree.root, tree.root, 80);
+    
 
     free(num_array);
     tree_free(&tree.root);
