@@ -11,6 +11,8 @@ typedef struct Node {
     struct Node *right;
 } Node;
 
+static int count = 0;
+
 /// Private functions
 Node *new_node(int key) {
     Node *node = (Node*) malloc(sizeof(Node));
@@ -44,6 +46,12 @@ void node_copy(Node *dst, Node *src) {
     dst->key = src->key;
 }
 
+void swap_nodes(Node **left, Node **right) {
+    Node *tmp = *left;
+    *left = *right;
+    *right = tmp;
+}
+
 int children_count(Node *node) {
     if (node == NULL) return -1;
     if (!node->left && !node->right) return 0;
@@ -75,6 +83,7 @@ Err tree_from_array(Node **root, int *array, int length) {
 void tree_insert(Node **root, Node *node) {
     if (*root == NULL) {
         *root = node;
+        count++;
         return;
     }
 
@@ -140,6 +149,8 @@ Err tree_delete_id(Node **root, Node *parent, int id) {
                 parent->right = NULL;
             }
 
+            count--;
+
         } else if (kids == 1) {
             printf("deleting only child\n");
             tmp = parent->left == *root ? parent->left : parent->right;
@@ -151,6 +162,8 @@ Err tree_delete_id(Node **root, Node *parent, int id) {
             } else if (parent->right == *root) {
                 parent->right = tmp1;
             }
+
+            count--;
 
         } else if (kids == 2) {
             tmp1 = successor(*root);
@@ -167,4 +180,18 @@ Err tree_delete_id(Node **root, Node *parent, int id) {
     }
 
     return e;
+}
+
+void tree_invert(Node *root) {
+    if (root == NULL) return;
+    swap_nodes(&root->left, &root->right);
+    tree_invert(root->left);
+    tree_invert(root->right);
+}
+
+int is_bst(Node *root) {
+    if (root == NULL) return 1;
+    if (root->left && root->left->key > root->key) return 0;
+    if (root->right && root->right->key < root->key) return 0;
+    return is_bst(root->left) && is_bst(root->right);
 }

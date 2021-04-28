@@ -17,4 +17,8 @@ void tree_free(Node **root);
 
 Err tree_delete_id(Node **root, Node *parent, int id);
 
+void tree_invert(Node *root);
+
+int is_bst(Node *root);
+
 #endif

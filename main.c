@@ -9,7 +9,7 @@
 Err create_num_array(int **array, int argc, char **argv);
 
 int main(int argc, char **argv) {
-    Tree tree = { NULL };
+    Tree tree = { NULL};
     Err e = { 0, "" };
     int *num_array = NULL;
 
@@ -26,10 +26,10 @@ int main(int argc, char **argv) {
     printf("*******Usage test*******\n\n");
 
     tree_from_array(&tree.root, num_array, argc - 1);
-    tree_delete_id(&tree.root, tree.root, 50);
-    tree_delete_id(&tree.root, tree.root, 70);
-    tree_delete_id(&tree.root, tree.root, 80);
+    tree_invert(tree.root);
     
+    int bst = is_bst(tree.root);
+    printf("bst = %d\n", bst);
 
     free(num_array);
     tree_free(&tree.root);
